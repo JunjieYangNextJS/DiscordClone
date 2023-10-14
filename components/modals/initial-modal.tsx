@@ -68,7 +68,7 @@ export const InitialModal = () => {
     console.log(values);
 
     try {
-      const response = await fetch("/api/servers", {
+      await fetch("/api/servers", {
         method: "POST",
         body: JSON.stringify(values),
       });

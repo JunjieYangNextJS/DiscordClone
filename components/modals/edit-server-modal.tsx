@@ -1,9 +1,9 @@
 "use client";
 
-// import axios from "axios";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
 
 import {
   Dialog,
@@ -26,6 +26,8 @@ import { Button } from "@/components/ui/button";
 import { FileUpload } from "@/components/file-upload";
 import { useRouter } from "next/navigation";
 import { useModal } from "@/hooks/use-modal-store";
+import { customTrim } from "@/lib/trimString";
+import { checkObjAHasObjBKeyValue } from "@/lib/checkObjAHasObjBKeyValue";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -36,11 +38,12 @@ const formSchema = z.object({
   }),
 });
 
-export const CreateServerModal = () => {
-  const { isOpen, onClose, type } = useModal();
+export const EditServerModal = () => {
+  const { isOpen, onClose, type, data } = useModal();
   const router = useRouter();
 
-  const isModalOpen = isOpen && type === "createServer";
+  const isModalOpen = isOpen && type === "editServer";
+  const { server } = data;
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -50,13 +53,25 @@ export const CreateServerModal = () => {
     },
   });
 
+  useEffect(() => {
+    if (server) {
+      form.setValue("name", server.name);
+      form.setValue("imageUrl", server.imageUrl);
+    }
+  }, [server, form]);
+
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await fetch("/api/servers", {
-        method: "POST",
-        body: JSON.stringify(values),
+      if (checkObjAHasObjBKeyValue(server, values)) return onClose();
+      // same use as below
+      // if (values.imageUrl === server?.imageUrl && values.name === server?.name)
+      //   return onClose();
+
+      await fetch(`/api/servers/${server?.id}`, {
+        method: "PATCH",
+        body: JSON.stringify(customTrim(values)),
       });
 
       form.reset();
@@ -127,8 +142,8 @@ export const CreateServerModal = () => {
               />
             </div>
             <DialogFooter className="bg-gray-100 px-6 py-4">
-              <Button variant="primary" disabled={isLoading} type="submit">
-                Create
+              <Button variant="primary" disabled={isLoading}>
+                Save
               </Button>
             </DialogFooter>
           </form>

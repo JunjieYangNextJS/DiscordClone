@@ -2,6 +2,8 @@
 
 import { CreateServerModal } from "@/components/modals/create-server-modal";
 import { useState, useEffect } from "react";
+import { InviteModal } from "../modals/invite-modal";
+import { EditServerModal } from "../modals/edit-server-modal";
 
 export const ModalProvider = () => {
   // This prevents modal to be rendered on the server side because it can create
@@ -25,6 +27,8 @@ export const ModalProvider = () => {
     <>
       {" "}
       <CreateServerModal />
+      <InviteModal />
+      <EditServerModal />
     </>
   );
 };
