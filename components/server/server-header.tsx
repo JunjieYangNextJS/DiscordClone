@@ -37,39 +37,38 @@ const ServerHeader = ({ server, role }: ServerHeaderProps) => {
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 text-xs font-medium text-black space-y-[2px] dark:text-neutral-400">
-        {/* remove all ! */}
-        {!isModerator && (
+        {isModerator && (
           <DropdownMenuItem className="text-indigo-600 dark:text-indigo-400 px-3 py-2 text-sm cursor-pointer">
             Invite People
             <UserPlus className="h-4 w-4 ml-auto" />
           </DropdownMenuItem>
         )}
-        {!isAdmin && (
+        {isAdmin && (
           <DropdownMenuItem className="px-3 py-2 text-sm cursor-pointer">
             Server Settings
             <Settings className="h-4 w-4 ml-auto" />
           </DropdownMenuItem>
         )}
-        {!isAdmin && (
+        {isAdmin && (
           <DropdownMenuItem className="px-3 py-2 text-sm cursor-pointer">
             Manage members
             <Users className="h-4 w-4 ml-auto" />
           </DropdownMenuItem>
         )}
-        {!isModerator && (
+        {isModerator && (
           <DropdownMenuItem className="px-3 py-2 text-sm cursor-pointer">
             Create Channel
             <PlusCircle className="h-4 w-4 ml-auto" />
           </DropdownMenuItem>
         )}
-        {!isModerator && <DropdownMenuSeparator />}
-        {!isAdmin && (
+        {isModerator && <DropdownMenuSeparator />}
+        {isAdmin && (
           <DropdownMenuItem className="text-rose-500 px-3 py-2 text-sm cursor-pointer">
             Delete Server
             <Trash className="h-4 w-4 ml-auto" />
           </DropdownMenuItem>
         )}
-        {/* keep this ! as is */}
+
         {!isAdmin && (
           <DropdownMenuItem className="text-rose-500 px-3 py-2 text-sm cursor-pointer">
             Leave Server
