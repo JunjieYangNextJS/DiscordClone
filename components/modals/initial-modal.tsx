@@ -65,17 +65,19 @@ export const InitialModal = () => {
     // } catch (error) {
     //   console.log(error);
     // }
-    console.log(values);
 
     try {
-      await fetch("/api/servers", {
+      const response = await fetch("/api/servers", {
         method: "POST",
         body: JSON.stringify(values),
       });
 
+      const data = await response.json();
+
       form.reset();
+      router.push(`/servers/${data.id}`);
       router.refresh();
-      window.location.reload();
+      // window.location.reload();
     } catch (error) {
       console.log(error);
     }

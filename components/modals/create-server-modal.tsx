@@ -54,14 +54,17 @@ export const CreateServerModal = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await fetch("/api/servers", {
+      const response = await fetch("/api/servers", {
         method: "POST",
         body: JSON.stringify(values),
       });
 
+      const data = await response.json();
+
       form.reset();
-      router.refresh();
       onClose();
+      router.push(`/servers/${data.id}`);
+      router.refresh();
     } catch (error) {
       console.log(error);
     }
