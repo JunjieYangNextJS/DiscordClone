@@ -35,37 +35,36 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
   }
 
   return (
-    <div className="bg-white dark:bg-[#313338] flex flex-col h-full justify-between">
+    <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
       <ChatHeader
         serverId={channel.serverId}
         name={channel.name}
         type="channel"
       />
-      <div>
-        <ChatMessages
-          member={member}
-          name={channel.name}
-          chatId={channel.id}
-          type="channel"
-          apiUrl="/api/messages" //fetch messages from this url
-          socketUrl="/api/socket/messages" //where we are triggering new messages
-          socketQuery={{
-            channelId: channel.id,
-            serverId: channel.serverId,
-          }}
-          paramKey="channelId"
-          paramValue={channel.id}
-        />
-        <ChatInput
-          name={channel.name}
-          type="channel"
-          apiUrl="/api/socket/messages"
-          query={{
-            channelId: channel.id,
-            serverId: channel.serverId,
-          }}
-        />
-      </div>
+
+      <ChatMessages
+        member={member}
+        name={channel.name}
+        chatId={channel.id}
+        type="channel"
+        apiUrl="/api/messages" //fetch messages from this url
+        socketUrl="/api/socket/messages" //where we are triggering new messages
+        socketQuery={{
+          channelId: channel.id,
+          serverId: channel.serverId,
+        }}
+        paramKey="channelId"
+        paramValue={channel.id}
+      />
+      <ChatInput
+        name={channel.name}
+        type="channel"
+        apiUrl="/api/socket/messages"
+        query={{
+          channelId: channel.id,
+          serverId: channel.serverId,
+        }}
+      />
     </div>
   );
 };
