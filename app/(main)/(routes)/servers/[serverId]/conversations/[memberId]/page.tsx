@@ -83,6 +83,8 @@ const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
             query={{
               conversationId: conversation.id,
             }}
+            member={memberOne}
+            profile={profile}
           />
         </>
       )}

@@ -1,5 +1,5 @@
 import { NextApiRequest } from "next";
-
+import {v4 as uuidv4} from "uuid";
 import { NextApiResponseServerIo } from "@/types";
 import { currentProfilePages } from "@/lib/current-profile-pages";
 import { db } from "@/lib/db";
@@ -13,10 +13,31 @@ export default async function handler(
   }
 
   try {
-    const profile = await currentProfilePages(req);
-    const { content, fileUrl } = req.body;
-    const { serverId, channelId } = req.query;
     
+    const { content, fileUrl, memberWithProfile } = req.body;
+    const { serverId, channelId } = req.query;
+
+    // send socket first/ optimistic post request
+    const now = new Date().toISOString()
+
+    const message = {
+        content,
+        fileUrl,
+        channelId,
+        member : memberWithProfile,
+        memberId: memberWithProfile.id,
+        delete: false,
+        id: uuidv4(),
+        createdAt: now,
+        updatedAt: now
+    }
+
+    const channelKey = `chat:${channelId}:messages`;
+
+    res?.socket?.server?.io?.emit(channelKey, message);
+    
+    const profile = await currentProfilePages(req);
+
     if (!profile) {
       return res.status(401).json({ error: "Unauthorized" });
     }    
@@ -68,7 +89,7 @@ export default async function handler(
       return res.status(404).json({ message: "Member not found" });
     }
 
-    const message = await db.message.create({
+    const dbMessage = await db.message.create({
       data: {
         content,
         fileUrl,
@@ -84,11 +105,11 @@ export default async function handler(
       }
     });
 
-    const channelKey = `chat:${channelId}:messages`;
+    // const channelKey = `chat:${channelId}:messages`;
 
-    res?.socket?.server?.io?.emit(channelKey, message);
+    // res?.socket?.server?.io?.emit(channelKey, message);
 
-    return res.status(200).json(message);
+    return res.status(200).json(dbMessage);
   } catch (error) {
     console.log("[MESSAGES_POST]", error);
     return res.status(500).json({ message: "Internal Error" }); 
