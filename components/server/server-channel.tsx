@@ -36,12 +36,14 @@ export const ServerChannel = ({
   // };
 
   const onAction = (e: React.MouseEvent, action: ModalType) => {
+    e.preventDefault();
     e.stopPropagation();
+    e.nativeEvent.stopImmediatePropagation();
     onOpen(action, { channel, server });
   };
 
   return (
-    <Link href={`/servers/${params?.serverId}/channels/${channel.id}`}>
+    <Link href={`/servers/${params?.serverId}/channels/${channel.id}`} passHref>
       <button
         // onClick={() => {
         //   navigationToServerChannel();

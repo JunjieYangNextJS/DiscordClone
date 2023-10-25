@@ -33,8 +33,8 @@ export const DeleteServerModal = () => {
       });
 
       onClose();
-      router.replace("/");
       router.refresh();
+      router.replace("/");
     } catch (error) {
       console.log(error);
     } finally {

@@ -68,6 +68,14 @@ export const ChatItem = ({
     router.push(`/servers/${params?.serverId}/conversations/${member.id}`);
   };
 
+  const handleDelete = () => {
+    setIsEditing(false);
+    onOpen("deleteMessage", {
+      apiUrl: `${socketUrl}/${id}`,
+      query: socketQuery,
+    });
+  };
+
   return (
     <div className="relative group flex items-center hover:bg-black/5 p-4 transition w-full">
       <div className="group flex gap-x-2 items-start w-full">
@@ -158,12 +166,7 @@ export const ChatItem = ({
           )}
           <ActionTooltip label="Delete">
             <Trash
-              onClick={() =>
-                onOpen("deleteMessage", {
-                  apiUrl: `${socketUrl}/${id}`,
-                  query: socketQuery,
-                })
-              }
+              onClick={() => handleDelete()}
               className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition"
             />
           </ActionTooltip>

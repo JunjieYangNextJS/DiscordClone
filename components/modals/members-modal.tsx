@@ -63,17 +63,10 @@ export const MembersModal = () => {
         },
       });
 
-      //   const response = await axios.delete(url);
-
-      const response = await fetch(url, {
-        method: "DELETE",
-      });
-      const data = await response.json();
-
-      console.log(data, "data");
+      const response = await axios.delete(url);
 
       router.refresh();
-      onOpen("members", { server: data });
+      onOpen("members", { server: response.data });
     } catch (error) {
       console.log(error);
     } finally {
@@ -81,14 +74,8 @@ export const MembersModal = () => {
     }
   };
 
-  const onRoleChange = async (
-    memberId: string,
-    role: MemberRole,
-    currentRole: string
-  ) => {
+  const onRoleChange = async (memberId: string, role: MemberRole) => {
     try {
-      if (role === currentRole) return;
-
       setLoadingId(memberId);
       const url = qs.stringifyUrl({
         url: `/api/members/${memberId}`,
@@ -97,17 +84,10 @@ export const MembersModal = () => {
         },
       });
 
-      // const response = await axios.patch(url, { role });
-
-      const response = await fetch(url, {
-        method: "PATCH",
-        body: JSON.stringify({ role }),
-      });
-
-      const data = await response.json();
+      const response = await axios.patch(url, { role });
 
       router.refresh();
-      onOpen("members", { server: data });
+      onOpen("members", { server: response.data });
     } catch (error) {
       console.log(error);
     } finally {
@@ -153,9 +133,7 @@ export const MembersModal = () => {
                           <DropdownMenuPortal>
                             <DropdownMenuSubContent>
                               <DropdownMenuItem
-                                onClick={() =>
-                                  onRoleChange(member.id, "GUEST", member.role)
-                                }
+                                onClick={() => onRoleChange(member.id, "GUEST")}
                               >
                                 <Shield className="h-4 w-4 mr-2" />
                                 Guest
@@ -165,11 +143,7 @@ export const MembersModal = () => {
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={() =>
-                                  onRoleChange(
-                                    member.id,
-                                    "MODERATOR",
-                                    member.role
-                                  )
+                                  onRoleChange(member.id, "MODERATOR")
                                 }
                               >
                                 <ShieldCheck className="h-4 w-4 mr-2" />

@@ -1,5 +1,6 @@
 "use client";
 
+import axios from "axios";
 import { Check, Copy, RefreshCw } from "lucide-react";
 import { useState } from "react";
 
@@ -37,30 +38,13 @@ export const InviteModal = () => {
   };
 
   const onNew = async () => {
-    // try {
-    //   setIsLoading(true);
-    //   const response = await axios.patch(
-    //     `/api/servers/${server?.id}/invite-code`
-    //   );
-
-    //   console.log(response, "res");
-    //   onOpen("invite", { server: response.data });
-    // } catch (error) {
-    //   console.log(error);
-    // } finally {
-    //   setIsLoading(false);
-    // }
-
     try {
       setIsLoading(true);
-      const response = await fetch(`/api/servers/${server?.id}/invite-code`, {
-        method: "PATCH",
-        body: undefined,
-      });
+      const response = await axios.patch(
+        `/api/servers/${server?.id}/invite-code`
+      );
 
-      const data = await response.json();
-
-      onOpen("invite", { server: data });
+      onOpen("invite", { server: response.data });
     } catch (error) {
       console.log(error);
     } finally {

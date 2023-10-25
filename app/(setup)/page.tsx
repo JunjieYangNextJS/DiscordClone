@@ -16,10 +16,10 @@ export default async function SetupPage() {
   });
 
   if (server) {
-    return redirect(
-      `/servers/779bceb2-e6f4-4ede-a91a-995db539dcfd/channels/651516d1-c1e6-49ee-8bd0-ade4e90304ae`
-    );
-    // return redirect(`/servers/${server.id}`);
+    // return redirect(
+    //   `/servers/779bceb2-e6f4-4ede-a91a-995db539dcfd/channels/651516d1-c1e6-49ee-8bd0-ade4e90304ae`
+    // );
+    return redirect(`/servers/${server.id}`);
   }
 
   return (
